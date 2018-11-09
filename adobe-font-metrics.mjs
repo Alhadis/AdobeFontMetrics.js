@@ -21,7 +21,7 @@ export default class AdobeFontMetrics{
 			input = this.parserState.tail + input;
 			this.parserState.tail = "";
 		}
-		input = input.split("\n");
+		input = input.split(/\r?\n|\r/);
 		this.parserState.tail = input.pop();
 		for(const line of input)
 			this.readLine(line);
