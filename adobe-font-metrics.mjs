@@ -20,6 +20,7 @@ export default class AdobeFontMetrics{
 				case "FamilyName":
 				case "FontName":
 				case "FullName":
+				case "Notice":
 				case "Version":
 				case "Weight":
 					this[lcKey] = value;
@@ -31,6 +32,7 @@ export default class AdobeFontMetrics{
 				case "Descender":
 				case "EscChar":
 				case "MappingScheme":
+				case "MetricsSets":
 				case "StdHW":
 				case "StdVW":
 				case "XHeight":
@@ -44,21 +46,20 @@ export default class AdobeFontMetrics{
 					this[lcKey] = "true" === value.trim().toLowerCase();
 					break;
 				
+				// Arrays
 				case "BlendAxisTypes":
-					this.blendAxisTypes = this.parseArray(value);
+				case "BlendDesignPositions":
+				case "BlendDesignMap":
+				case "WeightVector":
+					this[lcKey] = this.parseArray(value)[0];
 					break;
 				
 				case "VVector":
-					this.vVector = value.trim().split(/\s+/).map(n => +n || 0);
-					break;
-				
-				// Concatenate duplicate notices
-				case "Notice":
-					this.notice += this.notice ? `\n${value}` : value;
+					this[lcKey] = this.parseArray(value);
 					break;
 				
 				case "FontBBox":
-					this.boundingBox = value.trim().split(/\s+/).map(n => +n || 0);
+					this.boundingBox = this.parseArray(value);
 					break;
 			}
 		}
@@ -70,46 +71,71 @@ export default class AdobeFontMetrics{
 		let token = "";
 		
 		const {length} = input;
+		const endToken = () => {
+			if(token){
+				if("true" === token || "false" === token)
+					token = "true" === token;
+				else if("/" === token[0])
+					token = token.substr(1);
+				else
+					token = parseFloat(token);
+				list.tokens.push(token);
+			}
+			token = "";
+		};
 		for(let i = 0; i < length; ++i){
 			const char = input[i];
 			
 			// Begin new array
 			if("[" === char){
-				token && list.tokens.push(token);
+				endToken();
 				list = {parent: list, tokens: []};
-				token = "";
 				++depth;
 			}
 			
 			// Terminate current array
 			else if("]" === char && depth > 0){
-				token && list.tokens.push(token);
+				endToken();
 				const {tokens} = list;
 				(list = list.parent).tokens.push(tokens);
-				token = "";
 				--depth;
 			}
 			
-			// Collect token data
-			else if(/\S/.test(char))
-				token += char;
-			else{
-				token && list.tokens.push(token);
-				token = "";
-			}
+			// Terminate token upon whitespace
+			else if(/\s/.test(char))
+				endToken();
+			
+			else token += char;
 		}
 		return list.tokens;
 	}
 }
 
 Object.assign(AdobeFontMetrics.prototype, {
-	characterSet:   "",
+	ascender: 0,
+	blendAxisTypes: null,
+	blendDesignMap: null,
+	blendDesignPositions: null,
+	boundingBox: null,
+	capHeight: 0,
+	characterSet: "",
+	descender: 0,
 	encodingScheme: "",
-	escChar:        0,
-	familyName:     "",
-	fontName:       "",
-	fullName:       "",
-	mappingScheme:  0,
-	version:        "",
-	weight:         "",
+	escChar: 0,
+	familyName: "",
+	fontName: "",
+	fullName: "",
+	isBaseFont: false,
+	isCIDFont: false,
+	isFixedV: false,
+	mappingScheme: 0,
+	metricsSets: 0,
+	notice: "",
+	stdHW: 0,
+	stdVW: 0,
+	version: "",
+	vVector: null,
+	weight: "",
+	weightVector: null,
+	xHeight: 0,
 });
