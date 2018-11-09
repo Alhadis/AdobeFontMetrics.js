@@ -4,7 +4,7 @@ export default class AdobeFontMetrics{
 		this.version     = "";
 		this.globalInfo  = {};
 		this.directions  = [{}, {}];
-		this.charMetrics = {};
+		this.charMetrics = [];
 		Object.defineProperty(this, "parserState", {
 			enumerable: false,
 			value: {
@@ -14,6 +14,14 @@ export default class AdobeFontMetrics{
 			},
 		});
 		input && this.readChunk(input);
+	}
+	
+	charByCode(value){
+		return this.charMetrics.find(char => value === char.code) || null;
+	}
+	
+	charByName(value){
+		return this.charMetrics.find(char => value === char.name) || null;
 	}
 	
 	readChunk(input){
@@ -33,8 +41,7 @@ export default class AdobeFontMetrics{
 				this.readHeaderField(input);
 				break;
 			case "chars":
-				const char = new CharacterMetric(input);
-				this.charMetrics[char.code] = char;
+				this.charMetrics.push(new CharacterMetric(input));
 				break;
 		}
 	}
