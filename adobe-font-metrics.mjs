@@ -1,11 +1,21 @@
 export default class AdobeFontMetrics{
 	
 	constructor(input = ""){
+		Object.defineProperty(this, "parserState", {
+			enumerable: false,
+			value: {tail: ""},
+		});
 		input && this.readChunk(input);
 	}
 	
 	readChunk(input){
-		for(const line of input.split("\n"))
+		if(this.parserState.tail){
+			input = this.parserState.tail + input;
+			this.parserState.tail = "";
+		}
+		input = input.split("\n");
+		this.parserState.tail = input.pop();
+		for(const line of input)
 			this.readLine(line);
 	}
 	
