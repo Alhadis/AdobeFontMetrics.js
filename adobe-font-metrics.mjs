@@ -1,9 +1,15 @@
 export default class AdobeFontMetrics{
 	
 	constructor(input = ""){
+		this.version    = "";
+		this.globalInfo = {};
+		this.directions = [{}, {}];
 		Object.defineProperty(this, "parserState", {
 			enumerable: false,
-			value: {tail: ""},
+			value: {
+				direction: 0,
+				tail: "",
+			},
 		});
 		input && this.readChunk(input);
 	}
@@ -24,6 +30,15 @@ export default class AdobeFontMetrics{
 			const [, key, value] = input;
 			const lcKey = key[0].toLowerCase() + key.substr(1);
 			switch(key){
+				// Sections
+				case "StartFontMetrics":
+					this.version = value;
+					break;
+				
+				case "StartDirection":
+					this.parserState.direction = +value || 0;
+					break;
+				
 				// Strings
 				case "CharacterSet":
 				case "EncodingScheme":
@@ -33,7 +48,7 @@ export default class AdobeFontMetrics{
 				case "Notice":
 				case "Version":
 				case "Weight":
-					this[lcKey] = value;
+					this.globalInfo[lcKey] = value;
 					break;
 				
 				// Numbers
@@ -46,14 +61,24 @@ export default class AdobeFontMetrics{
 				case "StdHW":
 				case "StdVW":
 				case "XHeight":
-					this[lcKey] = +value || 0;
+					this.globalInfo[lcKey] = +value || 0;
+					break;
+				
+				case "UnderlinePosition":
+				case "UnderlineThickness":
+				case "ItalicAngle":
+					this.setDirectionProperty(lcKey, +value || 0);
 					break;
 				
 				// Booleans
 				case "IsBaseFont":
 				case "IsCIDFont":
 				case "IsFixedV":
-					this[lcKey] = "true" === value.trim().toLowerCase();
+					this.globalInfo[lcKey] = this.parseBoolean(value);
+					break;
+				
+				case "IsFixedPitch":
+					this.setDirectionProperty(lcKey, this.parseBoolean(value));
 					break;
 				
 				// Arrays
@@ -61,15 +86,15 @@ export default class AdobeFontMetrics{
 				case "BlendDesignPositions":
 				case "BlendDesignMap":
 				case "WeightVector":
-					this[lcKey] = this.parseArray(value)[0];
+					this.globalInfo[lcKey] = this.parseArray(value)[0];
 					break;
 				
 				case "VVector":
-					this[lcKey] = this.parseArray(value);
+					this.globalInfo[lcKey] = this.parseArray(value);
 					break;
 				
 				case "FontBBox":
-					this.boundingBox = this.parseArray(value);
+					this.globalInfo.boundingBox = this.parseArray(value);
 					break;
 			}
 		}
@@ -119,33 +144,17 @@ export default class AdobeFontMetrics{
 		}
 		return list.tokens;
 	}
-}
+	
+	parseBoolean(input){
+		return "true" === input.trim().toLowerCase();
+	}
 
-Object.assign(AdobeFontMetrics.prototype, {
-	ascender: 0,
-	blendAxisTypes: null,
-	blendDesignMap: null,
-	blendDesignPositions: null,
-	boundingBox: null,
-	capHeight: 0,
-	characterSet: "",
-	descender: 0,
-	encodingScheme: "",
-	escChar: 0,
-	familyName: "",
-	fontName: "",
-	fullName: "",
-	isBaseFont: false,
-	isCIDFont: false,
-	isFixedV: false,
-	mappingScheme: 0,
-	metricsSets: 0,
-	notice: "",
-	stdHW: 0,
-	stdVW: 0,
-	version: "",
-	vVector: null,
-	weight: "",
-	weightVector: null,
-	xHeight: 0,
-});
+	setDirectionProperty(key, value){
+		const dir = this.parserState.direction;
+		if(2 === dir)
+			this.directions[0][key] =
+			this.directions[1][key] = value;
+		else
+			this.directions[dir][key] = value;
+	}
+}
