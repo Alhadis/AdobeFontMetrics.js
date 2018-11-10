@@ -199,12 +199,12 @@ export default class AdobeFontMetrics{
 	}
 	
 	setDirectionProperty(key, value){
+		const target = this.parserState.descendent || this;
+		const list = target.directions = target.directions || [{}, {}];
 		const dir = this.parserState.direction;
-		if(2 === dir)
-			this.directions[0][key] =
-			this.directions[1][key] = value;
-		else
-			this.directions[dir][key] = value;
+		2 === dir
+			? list[0][key] = list[1][key] = value
+			: list[dir][key] = value;
 	}
 }
 

@@ -1,0 +1,91 @@
+StartCompFontMetrics 3.0
+MetricsSets 0
+FontName GothicBBB-Medium-83pv-RKSJ-H
+IsBaseFont false
+Characters 8807
+FontBBox -22 -252 1000 892
+EncodingScheme FontSpecific
+MappingScheme 6
+FullName GothicBBB Medium JIS83 ShiftJIS Encoded ...[truncated]
+FamilyName GothicBBB
+Weight Medium
+Version 001.001
+Notice Copyright 1987, 1988, 1989 Adobe Systems ...[truncated]
+StartDirection 0
+ItalicAngle 0
+EndDirection
+Descendents 7
+StartDescendent <00> <7F>
+FontName PCHelvetica
+IsBaseFont true
+Characters 95
+FontBBox -22 -220 950 770
+EncodingScheme FontSpecific
+FullName PC Helvetica
+FamilyName Helvetica
+Weight Medium
+Version 001.001
+Notice Copyright 1985, 1987 Adobe Systems ...[truncated]
+StartDirection 0
+ItalicAngle 0
+UnderlinePosition -97
+UnderlineThickness 73
+EndDirection
+EndDescendent
+StartDescendent <80> <80>
+FontName NotDefFont
+IsBaseFont true
+Characters 0
+EncodingScheme NotDefEncoding
+EndDescendent
+StartDescendent <8100> <9FFF>
+FontName GothicBBB-Medium-83pv-SuppA-H
+IsBaseFont false
+Characters 5828
+FontBBox 0 -252 1000 892
+EncodingScheme ExtShiftJIS-A-CFEncoding
+MappingScheme 2
+EndDescendent
+StartDescendent <A0> <DF>
+FontName GothicBBB-Medium.SuppK
+IsBaseFont true
+Characters 64
+FontBBox 0 -114 500 874
+EncodingScheme FontSpecific
+StartDirection 0
+CharWidth 500 0
+EndDirection
+EndDescendent
+StartDescendent <E000> <EFFF>
+FontName GothicBBB-Medium-83pv-SuppB-H
+IsBaseFont false
+Characters 2820
+FontBBox 3 -252 1000 880
+EncodingScheme FontSpecific
+MappingScheme 2
+StartDirection 0
+CharWidth 1000 0
+EndDirection
+EndDescendent
+StartDescendent <F000> <FBFF>
+FontName UserGaiji
+IsBaseFont false
+Characters 0
+EncodingScheme FontSpecific
+MappingScheme 2
+FullName User defined Gaiji Composite Font
+FamilyName User Defined
+Weight User Defined
+Notice Copyright 1987, 1988, 1989 Adobe Systems ...[truncated]
+StartDirection 0
+ItalicAngle 0
+EndDirection
+Version 001.001
+EndDescendent
+StartDescendent <FC> <FF>
+FontName NotDefFont
+IsBaseFont true
+Characters 0
+EncodingScheme NotDefEncoding
+EndDescendent
+EndCompFontMetrics
