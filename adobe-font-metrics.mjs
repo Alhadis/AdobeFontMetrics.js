@@ -1,6 +1,7 @@
 export default class AdobeFontMetrics{
 	
 	constructor(input = ""){
+		this.format      = "";
 		this.version     = "";
 		this.globalInfo  = {};
 		this.directions  = [{}, {}];
@@ -12,6 +13,7 @@ export default class AdobeFontMetrics{
 			enumerable: false,
 			value: {
 				direction: 0,
+				endKey: "",
 				section: "",
 				tail: "",
 			},
@@ -28,6 +30,7 @@ export default class AdobeFontMetrics{
 	}
 	
 	readChunk(input){
+		if(this.parserState.done) return;
 		input = String(input || "");
 		if(this.parserState.tail){
 			input = this.parserState.tail + input;
@@ -40,21 +43,54 @@ export default class AdobeFontMetrics{
 	}
 	
 	readLine(input){
+		if(this.parserState.done) return;
+		
 		if(/^(\S+)\s*(\S.*)?$/.test(input)){
 			const key   = RegExp.$1;
 			const value = RegExp.$2;
 			
 			switch(key){
-				// Unimportant section changes
+				// Format specifiers
 				case "StartFontMetrics":
+				case "StartCompFontMetrics":
+				case "StartMasterFontMetrics":
 					this.version = value;
+					this.format  = {F: "afm", C: "acfm", M: "amfm"}[key[5]];
+					this.parserState.endKey = key.replace(/^Start/, "End");
 					break;
 				
+				// Optional direction specifier
 				case "StartDirection":
 					this.parserState.direction = +value || 0;
 					break;
 				
+				// ACFM only: Descendent font
+				case "StartDescendent": {
+					const root = this.parserState.descendent || this;
+					(root.descendents = root.descendents || [])
+						.push(this.parserState.descendent = {
+							charRange: value.trim().split(/\s+/).map(parseHex),
+							parent: root,
+						});
+					break;
+				}
+				case "EndDescendent": {
+					const desc = this.parserState.descendent;
+					if(!desc) return;
+					this.parserState.descendent = desc === this
+						? null
+						: desc.parent;
+					delete desc.parent;
+					break;
+				}
+				
 				default: {
+					// EOF; ignore trailing data
+					if(key === this.parserState.endKey){
+						this.parserState.done = true;
+						return;
+					}
+					
 					// Major (state-significant) section changes
 					if(/^(Start|End)(\S+)(0|1)?$/.test(key)){
 						if("Start" === RegExp.$1){
@@ -92,6 +128,10 @@ export default class AdobeFontMetrics{
 	
 	setField(key, value){
 		const lcKey = key[0].toLowerCase() + key.substr(1);
+		const fontInfo = "acfm" === this.format
+			? this.parserState.descendent || this.globalInfo
+			: this.globalInfo;
+			
 		switch(key){
 			// Strings
 			case "CharacterSet":
@@ -102,12 +142,13 @@ export default class AdobeFontMetrics{
 			case "Notice":
 			case "Version":
 			case "Weight":
-				this.globalInfo[lcKey] = value;
+				fontInfo[lcKey] = value;
 				break;
 			
 			// Numbers
 			case "Ascender":
 			case "CapHeight":
+			case "Characters":
 			case "Descender":
 			case "EscChar":
 			case "MappingScheme":
@@ -115,7 +156,7 @@ export default class AdobeFontMetrics{
 			case "StdHW":
 			case "StdVW":
 			case "XHeight":
-				this.globalInfo[lcKey] = +value || 0;
+				fontInfo[lcKey] = +value || 0;
 				break;
 			
 			case "UnderlinePosition":
@@ -128,7 +169,7 @@ export default class AdobeFontMetrics{
 			case "IsBaseFont":
 			case "IsCIDFont":
 			case "IsFixedV":
-				this.globalInfo[lcKey] = parseBoolean(value);
+				fontInfo[lcKey] = parseBoolean(value);
 				break;
 			
 			case "IsFixedPitch":
@@ -140,15 +181,15 @@ export default class AdobeFontMetrics{
 			case "BlendDesignPositions":
 			case "BlendDesignMap":
 			case "WeightVector":
-				this.globalInfo[lcKey] = parseArray(value)[0];
+				fontInfo[lcKey] = parseArray(value)[0];
 				break;
 			
 			case "VVector":
-				this.globalInfo[lcKey] = parseArray(value);
+				fontInfo[lcKey] = parseArray(value);
 				break;
 			
 			case "FontBBox":
-				this.globalInfo.boundingBox = parseArray(value);
+				fontInfo.boundingBox = parseArray(value);
 				break;
 			
 			// User-defined

@@ -1,0 +1,54 @@
+StartCompFontMetrics 3.0
+MetricsSets 1
+FontName Ryumin-Light-V
+IsBaseFont false
+Characters 7238
+FontBBox -500 -1185 500 23
+EncodingScheme JIS12-88-CFEncoding
+MappingScheme 2
+FullName Ryumin Light 1983 JIS Standard Vertical Composite Font
+FamilyName Ryumin
+Weight Light
+Version 001.001
+Notice Copyright 1987, 1988, 1989 Adobe Systems ...[truncated]
+StartDirection 1
+ItalicAngle 0
+CharWidth 0 -1000
+EndDirection
+Descendents 256
+StartDescendent <0000> <00FF>
+FontName NotDefFont
+IsBaseFont true
+Characters 0
+EncodingScheme NotDefEncoding
+EndDescendent
+StartDescendent <0100> <01FF>
+FontName NotDefFont
+EndDescendent
+StartDescendent <2100> <21FF>
+FontName Ryumin-Light.r21v
+IsBaseFont true
+Characters 94
+FontBBox -495 -1020 495 0
+EncodingScheme JISEncoding
+EndDescendent
+StartDescendent <2200> <22FF>
+
+EndDescendent
+StartDescendent <7400> <74FF>
+FontName Ryumin-Light.r74
+IsBaseFont true
+Characters 94
+FontBBox -464 -964 481 -53
+EncodingScheme JISEncoding
+EndDescendent
+StartDescendent <7500> <75FF>
+
+EndDescendent
+StartDescendent <FF00> <FFFF>
+FontName NotDefFont
+IsBaseFont true
+Characters 0
+EncodingScheme NotDefEncoding
+EndDescendent
+EndCompFontMetrics
