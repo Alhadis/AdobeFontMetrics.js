@@ -1,0 +1,62 @@
+StartMasterFontMetrics 4.0
+Comment Copyright 1991, 1992 Adobe Systems Incorporated. All Rights Reserved.
+Comment Creation Date: Tue Nov 27 14:35:40 1990
+FontName MyriadMM
+FullName Myriad MM
+FamilyName Myriad MM
+Weight All
+ItalicAngle 0
+IsFixedPitch false
+FontBBox -55.16 -250.00 1143.86 834.91
+UnderlinePosition -100
+UnderlineThickness 50
+Version 000.009
+Notice Copyright 1991, 1992 Adobe Systems Incorporated. All Rights Reserved.
+EncodingScheme AdobeStandardEncoding
+CapHeight 674
+XHeight 483.72
+Ascender 710.00
+Descender -198.00
+Masters 4
+Axes 2
+WeightVector [0.17 0.08 0.52 0.23 ]
+BlendDesignPositions [[0 0] [0 1] [1 0] [1 1]]
+BlendDesignMap [[[215 0][830 1]][[200 0][600 1]]]
+BlendAxisTypes [/Weight /Width ]
+StartAxis
+AxisLabel Weight
+AxisType Weight
+EndAxis
+StartAxis
+AxisLabel Width
+AxisType Width
+EndAxis
+StartMaster
+FontName MyriadMM-LightCn
+FullName Myriad MM Light Condensed
+FamilyName Myriad MM
+Version 001.000
+WeightVector [1 0 0 0 ]
+EndMaster
+StartMaster
+FontName MyriadMM-BlackCn
+FullName Myriad MM Black Condensed
+FamilyName Myriad MM
+Version 000.009
+WeightVector [0 1 0 0 ]
+EndMaster
+StartMaster
+FontName MyriadMM-LightSemiEx
+FullName Myriad MM Light Semi Extended
+FamilyName Myriad MM
+Version 000.009
+WeightVector [0 0 1 0 ]
+EndMaster
+StartMaster
+FontName MyriadMM-BlackSemiEx
+FullName Myriad MM Black Semi Extended
+FamilyName Myriad MM
+Version 001.000
+WeightVector [0 0 0 1 ]
+EndMaster
+EndMasterFontMetrics

@@ -1,0 +1,90 @@
+StartMasterFontMetrics 4.1
+Comment Copyright � Apostrophe ('). Distribute freely. apostrofe@mail.com
+Comment UniqueID 4000240
+Comment Panose 2 0 5 6 2 0 0 2 0 4
+FullName ImpossibleMM
+FontName ImpossibleMM
+FamilyName ImpossibleMM
+Weight All (Multiple Master)
+Notice � Apostrophe ('). Distribute freely. apostrofe@mail.com
+Version 001.001
+IsFixedPitch false
+ItalicAngle 0.00
+FontBBox -101 -234 1000 983
+Ascender 812
+Descender 240
+XHeight 662
+CapHeight 812
+UnderlinePosition -91
+UnderlineThickness 87
+EncodingScheme FontSpecific
+Masters 8
+Axes 3
+WeightVector [1.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 ]
+BlendDesignPositions [[0.0000 0.0000 0.0000 ][1.0000 0.0000 0.0000 ][0.0000 1.0000 0.0000 ][1.0000 1.0000 0.0000 ][0.0000 0.0000 1.0000 ][1.0000 0.0000 1.0000 ][0.0000 1.0000 1.0000 ][1.0000 1.0000 1.0000 ]]
+BlendDesignMap [[[0.00 0.00 ][1000.00 1.00 ]][[0.00 0.00 ][1000.00 1.00 ]][[0.00 0.00 ][1000.00 1.00 ]]]
+BlendAxisTypes [/Width /OpticalSize /Serif ]
+StartAxis
+AxisLabel Width
+AxisType Width
+EndAxis
+StartAxis
+AxisLabel OpticalSize
+AxisType OpticalSize
+EndAxis
+StartAxis
+AxisLabel Serif
+AxisType Serif
+EndAxis
+StartPrimaryFonts 6
+PC 215 300 ; PL (LT)(_)(CN) ; PN (a(Light Condensed)) ;
+PC 1000.0 1000.0 0.0 0.0 0.0 1000.0 0.0 0.0 ; PC 0.0 1000.0 0.0 0.0 465.0 465.0 0.0 0.0 ; PC 465.0 465.0 0.0 0.0 0.0 0.0 1000.0 0.0 ; PC 0.0 0.0 1000.0 0.0 465.0 485.0 1000.0 0.0 ; PC 465.0 485.0 1000.0 0.0 999.0 999.0 999.0 0.0 ; PC 999.0 999.0 999.0 0.0 0.0 0.0 0.0 0.0 ; EndPrimaryFonts
+StartMaster
+WeightVector [1.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 ]
+FontName ImpossibleMM_0_wd_0_op_0_sr
+FullName ImpossibleMM_0 wd 0 op 0 sr
+FamilyName ImpossibleMM
+EndMaster
+StartMaster
+WeightVector [0.9990 0.0010 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 ]
+FontName ImpossibleMM_1_wd_0_op_0_sr
+FullName ImpossibleMM_1 wd 0 op 0 sr
+FamilyName ImpossibleMM
+EndMaster
+StartMaster
+WeightVector [0.9990 0.0000 0.0010 0.0000 0.0000 0.0000 0.0000 0.0000 ]
+FontName ImpossibleMM_0_wd_1_op_0_sr
+FullName ImpossibleMM_0 wd 1 op 0 sr
+FamilyName ImpossibleMM
+EndMaster
+StartMaster
+WeightVector [0.9980 0.0010 0.0010 0.0000 0.0000 0.0000 0.0000 0.0000 ]
+FontName ImpossibleMM_1_wd_1_op_0_sr
+FullName ImpossibleMM_1 wd 1 op 0 sr
+FamilyName ImpossibleMM
+EndMaster
+StartMaster
+WeightVector [0.9990 0.0000 0.0000 0.0000 0.0010 0.0000 0.0000 0.0000 ]
+FontName ImpossibleMM_0_wd_0_op_1_sr
+FullName ImpossibleMM_0 wd 0 op 1 sr
+FamilyName ImpossibleMM
+EndMaster
+StartMaster
+WeightVector [0.9980 0.0010 0.0000 0.0000 0.0010 0.0000 0.0000 0.0000 ]
+FontName ImpossibleMM_1_wd_0_op_1_sr
+FullName ImpossibleMM_1 wd 0 op 1 sr
+FamilyName ImpossibleMM
+EndMaster
+StartMaster
+WeightVector [0.9980 0.0000 0.0010 0.0000 0.0010 0.0000 0.0000 0.0000 ]
+FontName ImpossibleMM_0_wd_1_op_1_sr
+FullName ImpossibleMM_0 wd 1 op 1 sr
+FamilyName ImpossibleMM
+EndMaster
+StartMaster
+WeightVector [0.9970 0.0010 0.0010 0.0000 0.0010 0.0000 0.0000 0.0000 ]
+FontName ImpossibleMM_1_wd_1_op_1_sr
+FullName ImpossibleMM_1 wd 1 op 1 sr
+FamilyName ImpossibleMM
+EndMaster
+EndMasterFontMetrics

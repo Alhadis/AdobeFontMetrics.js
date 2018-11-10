@@ -84,6 +84,16 @@ export default class AdobeFontMetrics{
 					break;
 				}
 				
+				// AMFM: Axes and masters
+				case "StartAxis":
+					(this.axes = this.axes || [])
+						.push(this.parserState.axis = {});
+					break;
+				case "StartMaster":
+					(this.masters = this.masters || [])
+						.push(this.parserState.master = {});
+					break;
+				
 				default: {
 					// EOF; ignore trailing data
 					if(key === this.parserState.endKey){
@@ -109,11 +119,14 @@ export default class AdobeFontMetrics{
 							break;
 						case "KernPairs": {
 							const dir = this.directions[this.parserState.direction];
-							(dir.kerningPairs = dir.kerningPairs || []).push(
-								new KerningPair(input)
-							);
+							(dir.kerningPairs = dir.kerningPairs || [])
+								.push(new KerningPair(input));
 							break;
 						}
+						case "PrimaryFonts":
+							(this.primaryFonts = this.primaryFonts || [])
+								.push(new PrimaryFont(input));
+							break;
 						case "TrackKern":
 							this.trackKerns.push(new TrackKern(value));
 							break;
@@ -127,11 +140,17 @@ export default class AdobeFontMetrics{
 	
 	
 	setField(key, value){
-		const lcKey = key[0].toLowerCase() + key.substr(1);
-		const fontInfo = "acfm" === this.format
-			? this.parserState.descendent || this.globalInfo
-			: this.globalInfo;
+		let fontInfo = this.globalInfo;
+		switch(this.format){
+			case "amfm":
+				fontInfo = this.parserState.master || fontInfo;
+				break;
+			case "acfm":
+				fontInfo = this.parserState.descendent || fontInfo;
+				break;
+		}
 			
+		const lcKey = key[0].toLowerCase() + key.substr(1);
 		switch(key){
 			// Strings
 			case "CharacterSet":
@@ -143,6 +162,11 @@ export default class AdobeFontMetrics{
 			case "Version":
 			case "Weight":
 				fontInfo[lcKey] = value;
+				break;
+			
+			case "AxisType":
+			case "AxisLabel":
+				this.setAxisProperty(key, value);
 				break;
 			
 			// Numbers
@@ -181,21 +205,26 @@ export default class AdobeFontMetrics{
 			case "BlendDesignPositions":
 			case "BlendDesignMap":
 			case "WeightVector":
-				fontInfo[lcKey] = parseArray(value)[0];
+				fontInfo[lcKey] = parsePSData(value)[0];
 				break;
 			
 			case "VVector":
-				fontInfo[lcKey] = parseArray(value);
+				fontInfo[lcKey] = parsePSData(value);
 				break;
 			
 			case "FontBBox":
-				fontInfo.boundingBox = parseArray(value);
+				fontInfo.boundingBox = parsePSData(value);
 				break;
 			
 			// User-defined
 			default:
 				/^[a-z]/.test(key) && this.userFields.set(key, value);
 		}
+	}
+	
+	setAxisProperty(key, value){
+		const {axis} = this.parserState;
+		axis && (axis[key.replace(/^Axis(.)/, (_, c) => c.toLowerCase())] = value);
 	}
 	
 	setDirectionProperty(key, value){
@@ -306,6 +335,30 @@ class KerningPair{
 	}
 }
 
+class PrimaryFont{
+	constructor(input){
+		this.coordinates = [];
+		this.labels      = [];
+		this.name        = "";
+		for(const field of input.trim().split(/\s*;\s*/)){
+			if(!/^(\S+)\s+(\S.*)$/.test(field)) continue;
+			const key   = RegExp.$1;
+			const value = RegExp.$2;
+			switch(key){
+				case "PC":
+					this.coordinates.push(...value.split(/\s+/).map(n => ~~n));
+					break;
+				case "PL":
+					this.labels.push(...parsePSData(value));
+					break;
+				case "PN":
+					this.name = parsePSData(value)[0];
+					break;
+			}
+		}
+	}
+}
+
 class TrackKern{
 	constructor(input){
 		input = input.trim().split(/\s+/);
@@ -324,9 +377,17 @@ function parseHex(input){
 		: parseInt(input);
 }
 
-function parseArray(input){
+
+/**
+ * Tokenise basic PostScript literals.
+ *
+ * @param {String} input
+ * @return {Array}
+ */
+export function parsePSData(input){
 	let list = {parent: null, tokens: []};
 	let depth = 0;
+	let parens = 0;
 	let token = "";
 	
 	const {length} = input;
@@ -336,6 +397,8 @@ function parseArray(input){
 				token = "true" === token;
 			else if("/" === token[0])
 				token = token.substr(1);
+			else if("(" === token[0])
+				token = token.slice(1, -1);
 			else
 				token = parseFloat(token);
 			list.tokens.push(token);
@@ -346,7 +409,7 @@ function parseArray(input){
 		const char = input[i];
 		
 		// Begin new array
-		if("[" === char){
+		if("[" === char && !parens){
 			endToken();
 			list = {parent: list, tokens: []};
 			++depth;
@@ -360,11 +423,22 @@ function parseArray(input){
 			--depth;
 		}
 		
-		// Terminate token upon whitespace
-		else if(/\s/.test(char))
+		// Terminate token upon (unquoted) whitespace
+		else if(!parens && /\s/.test(char))
 			endToken();
 		
-		else token += char;
+		// Terminate string literal or bracket-pair
+		else if(")" === char && !--parens){
+			token += char;
+			endToken();
+		}
+		
+		else{
+			// Start literal text or balanced bracket-pair
+			if("(" === char)
+				parens++ || endToken();
+			token += char;
+		}
 	}
 	return list.tokens;
 }
