@@ -5,6 +5,7 @@ export default class AdobeFontMetrics{
 		this.globalInfo  = {};
 		this.directions  = [{}, {}];
 		this.charMetrics = [];
+		this.composites  = [];
 		this.trackKerns  = [];
 		Object.defineProperty(this, "parserState", {
 			enumerable: false,
@@ -37,8 +38,10 @@ export default class AdobeFontMetrics{
 	}
 	
 	readLine(input){
-		if(input = input.match(/^(\S+)\s*(\S.*)?$/)){
-			const [, key, value] = input;
+		if(/^(\S+)\s*(\S.*)?$/.test(input)){
+			const key   = RegExp.$1;
+			const value = RegExp.$2;
+			
 			switch(key){
 				// Unimportant section changes
 				case "StartFontMetrics":
@@ -61,12 +64,16 @@ export default class AdobeFontMetrics{
 					
 					else switch(this.parserState.section){
 						case "CharMetrics":
-							this.charMetrics.push(new CharacterMetric(value));
+							this.charMetrics.push(new CharacterMetric(input));
+							break;
+						case "Composites":
+							this.composites.push(new CharacterComposite(input));
 							break;
 						case "KernPairs": {
-							const pair = new KerningPair(value);
 							const dir = this.directions[this.parserState.direction];
-							(dir.kerningPairs = dir.kerningPairs || []).push(pair);
+							(dir.kerningPairs = dir.kerningPairs || []).push(
+								new KerningPair(input)
+							);
 							break;
 						}
 						case "TrackKern":
@@ -212,24 +219,41 @@ class CharacterMetric{
 	}
 }
 
+class CharacterComposite{
+	constructor(input){
+		this.name = "";
+		this.parts = [];
+		for(const field of input.trim().split(/\s*;\s*/)){
+			const [key, name, x, y] = field.split(/\s+/);
+			switch(key){
+				case "CC":
+					this.name = name;
+					break;
+				case "PCC":
+					this.parts.push({
+						char: name,
+						offset: [+x || 0, +y || 0],
+					});
+			}
+		}
+	}
+}
+
 class KerningPair{
 	constructor(input){
 		const [keyword, ...args] = input.trim().split(/\s+/);
-		this.a = args[0];
-		this.b = args[1];
-		this.x = +args[2] || 0;
-		this.y = +args[3] || 0;
-		
+		this.chars  = [args[0], args[1]];
+		this.offset = [+args[2] || 0, +args[3] || 0];
 		switch(keyword){
 			case "KPH":
-				this.a = parseHex(this.a);
-				this.b = parseHex(this.b);
+				this.chars[0] = parseHex(this.chars[0]);
+				this.chars[1] = parseHex(this.chars[1]);
 				break;
 			case "KPX":
-				this.y = 0;
+				this.offset[1] = 0;
 				break;
 			case "KPY":
-				this.x = 0;
+				this.offset[0] = 0;
 				break;
 		}
 	}
