@@ -7,6 +7,7 @@ export default class AdobeFontMetrics{
 		this.charMetrics = [];
 		this.composites  = [];
 		this.trackKerns  = [];
+		this.userFields  = new Map();
 		Object.defineProperty(this, "parserState", {
 			enumerable: false,
 			value: {
@@ -149,6 +150,10 @@ export default class AdobeFontMetrics{
 			case "FontBBox":
 				this.globalInfo.boundingBox = parseArray(value);
 				break;
+			
+			// User-defined
+			default:
+				/^[a-z]/.test(key) && this.userFields.set(key, value);
 		}
 	}
 	
