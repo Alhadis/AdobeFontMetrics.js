@@ -27,6 +27,7 @@ export default class AdobeFontMetrics{
 	}
 	
 	readChunk(input){
+		input = String(input || "");
 		if(this.parserState.tail){
 			input = this.parserState.tail + input;
 			this.parserState.tail = "";
