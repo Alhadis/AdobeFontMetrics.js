@@ -5,11 +5,12 @@ export default class AdobeFontMetrics{
 		this.globalInfo  = {};
 		this.directions  = [{}, {}];
 		this.charMetrics = [];
+		this.trackKerns  = [];
 		Object.defineProperty(this, "parserState", {
 			enumerable: false,
 			value: {
 				direction: 0,
-				section: "header",
+				section: "",
 				tail: "",
 			},
 		});
@@ -36,23 +37,10 @@ export default class AdobeFontMetrics{
 	}
 	
 	readLine(input){
-		switch(this.parserState.section){
-			case "header":
-				this.readHeaderField(input);
-				break;
-			case "chars":
-				this.charMetrics.push(new CharacterMetric(input));
-				break;
-		}
-	}
-	
-	
-	readHeaderField(input){
 		if(input = input.match(/^(\S+)\s*(\S.*)?$/)){
 			const [, key, value] = input;
-			const lcKey = key[0].toLowerCase() + key.substr(1);
 			switch(key){
-				// Sections
+				// Unimportant section changes
 				case "StartFontMetrics":
 					this.version = value;
 					break;
@@ -61,68 +49,98 @@ export default class AdobeFontMetrics{
 					this.parserState.direction = +value || 0;
 					break;
 				
-				case "StartCharMetrics":
-					this.parserState.section = "chars";
-					break;
-				
-				// Strings
-				case "CharacterSet":
-				case "EncodingScheme":
-				case "FamilyName":
-				case "FontName":
-				case "FullName":
-				case "Notice":
-				case "Version":
-				case "Weight":
-					this.globalInfo[lcKey] = value;
-					break;
-				
-				// Numbers
-				case "Ascender":
-				case "CapHeight":
-				case "Descender":
-				case "EscChar":
-				case "MappingScheme":
-				case "MetricsSets":
-				case "StdHW":
-				case "StdVW":
-				case "XHeight":
-					this.globalInfo[lcKey] = +value || 0;
-					break;
-				
-				case "UnderlinePosition":
-				case "UnderlineThickness":
-				case "ItalicAngle":
-					this.setDirectionProperty(lcKey, +value || 0);
-					break;
-				
-				// Booleans
-				case "IsBaseFont":
-				case "IsCIDFont":
-				case "IsFixedV":
-					this.globalInfo[lcKey] = parseBoolean(value);
-					break;
-				
-				case "IsFixedPitch":
-					this.setDirectionProperty(lcKey, parseBoolean(value));
-					break;
-				
-				// Arrays
-				case "BlendAxisTypes":
-				case "BlendDesignPositions":
-				case "BlendDesignMap":
-				case "WeightVector":
-					this.globalInfo[lcKey] = parseArray(value)[0];
-					break;
-				
-				case "VVector":
-					this.globalInfo[lcKey] = parseArray(value);
-					break;
-				
-				case "FontBBox":
-					this.globalInfo.boundingBox = parseArray(value);
-					break;
+				default: {
+					// Major (state-significant) section changes
+					if(/^(Start|End)(\S+)(0|1)?$/.test(key)){
+						if("Start" === RegExp.$1){
+							this.parserState.section = RegExp.$2;
+							this.parserState.direction = +RegExp.$3 || 0;
+						}
+						else this.parserState.section = "";
+					}
+					
+					else switch(this.parserState.section){
+						case "CharMetrics":
+							this.charMetrics.push(new CharacterMetric(value));
+							break;
+						case "KernPairs": {
+							const pair = new KerningPair(value);
+							const dir = this.directions[this.parserState.direction];
+							(dir.kerningPairs = dir.kerningPairs || []).push(pair);
+							break;
+						}
+						case "TrackKern":
+							this.trackKerns.push(new TrackKern(value));
+							break;
+						default:
+							this.setField(key, value);
+					}
+				}
 			}
+		}
+	}
+	
+	
+	setField(key, value){
+		const lcKey = key[0].toLowerCase() + key.substr(1);
+		switch(key){
+			// Strings
+			case "CharacterSet":
+			case "EncodingScheme":
+			case "FamilyName":
+			case "FontName":
+			case "FullName":
+			case "Notice":
+			case "Version":
+			case "Weight":
+				this.globalInfo[lcKey] = value;
+				break;
+			
+			// Numbers
+			case "Ascender":
+			case "CapHeight":
+			case "Descender":
+			case "EscChar":
+			case "MappingScheme":
+			case "MetricsSets":
+			case "StdHW":
+			case "StdVW":
+			case "XHeight":
+				this.globalInfo[lcKey] = +value || 0;
+				break;
+			
+			case "UnderlinePosition":
+			case "UnderlineThickness":
+			case "ItalicAngle":
+				this.setDirectionProperty(lcKey, +value || 0);
+				break;
+			
+			// Booleans
+			case "IsBaseFont":
+			case "IsCIDFont":
+			case "IsFixedV":
+				this.globalInfo[lcKey] = parseBoolean(value);
+				break;
+			
+			case "IsFixedPitch":
+				this.setDirectionProperty(lcKey, parseBoolean(value));
+				break;
+			
+			// Arrays
+			case "BlendAxisTypes":
+			case "BlendDesignPositions":
+			case "BlendDesignMap":
+			case "WeightVector":
+				this.globalInfo[lcKey] = parseArray(value)[0];
+				break;
+			
+			case "VVector":
+				this.globalInfo[lcKey] = parseArray(value);
+				break;
+			
+			case "FontBBox":
+				this.globalInfo.boundingBox = parseArray(value);
+				break;
 		}
 	}
 	
@@ -191,6 +209,40 @@ class CharacterMetric{
 					break;
 			}
 		}
+	}
+}
+
+class KerningPair{
+	constructor(input){
+		const [keyword, ...args] = input.trim().split(/\s+/);
+		this.a = args[0];
+		this.b = args[1];
+		this.x = +args[2] || 0;
+		this.y = +args[3] || 0;
+		
+		switch(keyword){
+			case "KPH":
+				this.a = parseHex(this.a);
+				this.b = parseHex(this.b);
+				break;
+			case "KPX":
+				this.y = 0;
+				break;
+			case "KPY":
+				this.x = 0;
+				break;
+		}
+	}
+}
+
+class TrackKern{
+	constructor(input){
+		input = input.trim().split(/\s+/);
+		this.degree       = +input[0] || 0;
+		this.minKern      = +input[2] || 0;
+		this.maxKern      = +input[4] || 0;
+		this.minPointSize = +input[1] || 0;
+		this.maxPointSize = +input[3] || 0;
 	}
 }
 
