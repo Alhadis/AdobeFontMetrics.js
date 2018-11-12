@@ -124,8 +124,11 @@ export default class AdobeFontMetrics{
 							break;
 						}
 						case "PrimaryFonts":
-							(this.primaryFonts = this.primaryFonts || [])
-								.push(new PrimaryFont(input));
+							for(const chunk of input.split(/\b(?=PC|End)/))
+								/^EndPrimaryFonts/.test(chunk)
+									? this.parserState.section = ""
+									: (this.primaryFonts = this.primaryFonts || [])
+										.push(new PrimaryFont(chunk));
 							break;
 						case "TrackKern":
 							this.trackKerns.push(new TrackKern(value));
