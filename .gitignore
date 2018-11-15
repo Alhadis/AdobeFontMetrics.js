@@ -18,6 +18,6 @@ package-lock.json
 /test.js
 
 # Project-specific
-/samples
 /adobe-font-metrics.js*
+/corpus
 *.tgz
