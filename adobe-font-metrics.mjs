@@ -387,7 +387,7 @@ function parseHex(input){
  * @param {String} input
  * @return {Array}
  */
-export function parsePSData(input){
+function parsePSData(input){
 	let list = {parent: null, tokens: []};
 	let depth = 0;
 	let parens = 0;
