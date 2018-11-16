@@ -16,6 +16,8 @@
 		"@alhadis/eslint-config": "^1.0.0",
 		"eslint": "^5.9.0",
 		"rollup": "^0.67.1",
-		"terser": "^3.10.11"
+		"terser": "^3.10.11",
+		"mocha":  "^5.2.0",
+		"chai":   "^4.2.0"
 	}
 }
