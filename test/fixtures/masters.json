@@ -1,0 +1,41 @@
+[{
+	"weightVector": [1, 0, 0, 0, 0, 0, 0, 0],
+	"fontName": "ImpossibleMM_0_wd_0_op_0_sr",
+	"fullName": "ImpossibleMM_0 wd 0 op 0 sr",
+	"familyName": "ImpossibleMM"
+},{
+	"weightVector": [0.999, 0.001, 0, 0, 0, 0, 0, 0],
+	"fontName": "ImpossibleMM_1_wd_0_op_0_sr",
+	"fullName": "ImpossibleMM_1 wd 0 op 0 sr",
+	"familyName": "ImpossibleMM"
+},{
+	"weightVector": [0.999, 0, 0.001, 0, 0, 0, 0, 0],
+	"fontName": "ImpossibleMM_0_wd_1_op_0_sr",
+	"fullName": "ImpossibleMM_0 wd 1 op 0 sr",
+	"familyName": "ImpossibleMM"
+},{
+	"weightVector": [0.998, 0.001, 0.001, 0, 0, 0, 0, 0],
+	"fontName": "ImpossibleMM_1_wd_1_op_0_sr",
+	"fullName": "ImpossibleMM_1 wd 1 op 0 sr",
+	"familyName": "ImpossibleMM"
+},{
+	"weightVector": [0.999, 0, 0, 0, 0.001, 0, 0, 0],
+	"fontName": "ImpossibleMM_0_wd_0_op_1_sr",
+	"fullName": "ImpossibleMM_0 wd 0 op 1 sr",
+	"familyName": "ImpossibleMM"
+},{
+	"weightVector": [0.998, 0.001, 0, 0, 0.001, 0, 0, 0],
+	"fontName": "ImpossibleMM_1_wd_0_op_1_sr",
+	"fullName": "ImpossibleMM_1 wd 0 op 1 sr",
+	"familyName": "ImpossibleMM"
+},{
+	"weightVector": [0.998, 0, 0.001, 0, 0.001, 0, 0, 0],
+	"fontName": "ImpossibleMM_0_wd_1_op_1_sr",
+	"fullName": "ImpossibleMM_0 wd 1 op 1 sr",
+	"familyName": "ImpossibleMM"
+},{
+	"weightVector": [0.997, 0.001, 0.001, 0, 0.001, 0, 0, 0],
+	"fontName": "ImpossibleMM_1_wd_1_op_1_sr",
+	"fullName": "ImpossibleMM_1 wd 1 op 1 sr",
+	"familyName": "ImpossibleMM"
+}]

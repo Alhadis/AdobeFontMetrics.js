@@ -10,10 +10,15 @@
 	"author": "John Gardner <gardnerjohng@gmail.com>",
 	"eslintConfig": {"extends": "@alhadis"},
 	"scripts": {
+		"lint": "make lint",
+		"test": "make test",
 		"prepare": "make"
 	},
+	"atomTestRunner": "atom-mocha",
+	"atom-mocha": {"specPattern": "/-spec\\.js$/i"},
 	"devDependencies": {
 		"@alhadis/eslint-config": "^1.0.0",
+		"atom-mocha": "^2.0.7",
 		"eslint": "^5.9.0",
 		"rollup": "^0.67.1",
 		"terser": "^3.10.11",

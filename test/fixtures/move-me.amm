@@ -1,0 +1,44 @@
+StartMasterFontMetrics 4.1
+Comment UniqueID 4079965
+Comment Panose 2 0 6 0 2 0 0 2 0 4
+FullName MoveMeMM
+FontName MoveMeMM
+FamilyName MoveMeMM
+Weight Book
+Notice   Luc(as) de Groot 1994
+Version 001.000
+IsFixedPitch false
+ItalicAngle 0.00
+FontBBox -138 -242 1319 1072
+Ascender 700
+Descender -200
+XHeight 500
+CapHeight 700
+UnderlinePosition -100
+UnderlineThickness 50
+EncodingScheme FontSpecific
+Masters 2
+Axes 1
+WeightVector [0.5000 0.5000 ]
+BlendDesignPositions [[0.0000 ][1.0000 ]]
+BlendDesignMap [[[0.00 0.00 ][1000.00 1.00 ]]]
+BlendAxisTypes [/Optical ]
+StartAxis
+AxisLabel Optical
+AxisType Optical Size
+EndAxis
+StartPrimaryFonts 3
+PC 500.0 0.0 ; PC 0.0 0.0 ; PC 1000.0 0.0 ; EndPrimaryFonts
+StartMaster
+WeightVector [1.0000 0.0000 ]
+FontName MoveMeMM_0_op
+FullName MoveMeMM_0 op
+FamilyName MoveMeMM
+EndMaster
+StartMaster
+WeightVector [0.9990 0.0010 ]
+FontName MoveMeMM_1_op
+FullName MoveMeMM_1 op
+FamilyName MoveMeMM
+EndMaster
+EndMasterFontMetrics
