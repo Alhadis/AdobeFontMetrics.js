@@ -219,6 +219,10 @@ export default class AdobeFontMetrics{
 				fontInfo.boundingBox = parsePSData(value);
 				break;
 			
+			case "CharWidth":
+				this.setDirectionProperty(lcKey, parsePSData(value));
+				break;
+			
 			// User-defined
 			default:
 				/^[a-z]/.test(key) && this.userFields.set(key, value);
