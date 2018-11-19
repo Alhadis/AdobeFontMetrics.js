@@ -46,7 +46,7 @@ describe("AdobeFontMetrics", () => {
 			it("stores global font information in its `globalInfo` hash", () => {
 				afm.should.have.property("globalInfo").which.eqls({
 					ascender: 750,
-					boundingBox: [-167, -239, 1294],
+					boundingBox: [-167, -239, 1294, 988],
 					capHeight: 731,
 					descender: -174,
 					encodingScheme: "AdobeStandardEncoding",
@@ -148,7 +148,7 @@ describe("AdobeFontMetrics", () => {
 					version:        "001.001",
 					weight:         "All (Multiple Master)",
 					weightVector:   [1, 0, 0, 0, 0, 0, 0, 0],
-					boundingBox:    [-101, -234, 1000],
+					boundingBox:    [-101, -234, 1000, 983],
 					xHeight:        662,
 					
 					// The actual designer's stuff

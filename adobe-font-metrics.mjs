@@ -443,6 +443,7 @@ function parsePSData(input){
 			token += char;
 		}
 	}
+	token && endToken();
 	return list.tokens;
 }
 
