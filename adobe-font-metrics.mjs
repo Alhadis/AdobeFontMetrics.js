@@ -336,7 +336,7 @@ class KerningPair{
 				this.offset[1] = 0;
 				break;
 			case "KPY":
-				this.offset[0] = 0;
+				this.offset.reverse()[0] = 0;
 				break;
 		}
 	}
