@@ -174,11 +174,14 @@ export default class AdobeFontMetrics{
 			
 			// Numbers
 			case "Ascender":
+			case "Axes":
 			case "CapHeight":
 			case "Characters":
+			case "Descendents":
 			case "Descender":
 			case "EscChar":
 			case "MappingScheme":
+			case "Masters":
 			case "MetricsSets":
 			case "StdHW":
 			case "StdVW":
