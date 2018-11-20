@@ -117,12 +117,6 @@ export default class AdobeFontMetrics{
 						case "Composites":
 							this.composites.push(new CharacterComposite(input));
 							break;
-						case "KernPairs": {
-							const dir = this.directions[this.parserState.direction];
-							(dir.kerningPairs = dir.kerningPairs || [])
-								.push(new KerningPair(input));
-							break;
-						}
 						case "PrimaryFonts":
 							for(const chunk of input.split(/\b(?=PC|End)/))
 								/^EndPrimaryFonts/.test(chunk)
@@ -134,7 +128,13 @@ export default class AdobeFontMetrics{
 							this.trackKerns.push(new TrackKern(value));
 							break;
 						default:
-							this.setField(key, value);
+							// Pair-wise kerning data with possible direction specifier
+							if(/^KernPairs(0|1)?$/.test(this.parserState.section)){
+								const dir = this.directions[this.parserState.direction = +RegExp.$1 || 0];
+								(dir.kerningPairs = dir.kerningPairs || [])
+									.push(new KerningPair(input));
+							}
+							else this.setField(key, value);
 					}
 				}
 			}
