@@ -434,7 +434,7 @@ function parsePostScript(input){
 			else if("/" === token[0])
 				token = token.substr(1);
 			else if("(" === token[0])
-				token = token.slice(1, -1);
+				token = token.replace(/^\(|\)$/g, "");
 			else
 				token = parseFloat(token);
 			list.tokens.push(token);
