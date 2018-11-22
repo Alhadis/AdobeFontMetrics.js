@@ -441,6 +441,12 @@ function parsePostScript(input){
 		}
 		token = "";
 	};
+	const endArray = () => {
+		endToken();
+		const {tokens} = list;
+		(list = list.parent).tokens.push(tokens);
+		--depth;
+	};
 	for(let i = 0; i < length; ++i){
 		const char = input[i];
 		
@@ -452,12 +458,8 @@ function parsePostScript(input){
 		}
 		
 		// Terminate current array
-		else if("]" === char && depth > 0){
-			endToken();
-			const {tokens} = list;
-			(list = list.parent).tokens.push(tokens);
-			--depth;
-		}
+		else if("]" === char && depth > 0)
+			endArray();
 		
 		// Terminate token upon (unquoted) whitespace
 		else if(!parens && /\s/.test(char))
@@ -476,6 +478,7 @@ function parsePostScript(input){
 			token += char;
 		}
 	}
+	while(depth > 0) endArray();
 	token && endToken();
 	return list.tokens;
 }
