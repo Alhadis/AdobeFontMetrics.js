@@ -211,19 +211,19 @@ export default class AdobeFontMetrics{
 			case "BlendDesignPositions":
 			case "BlendDesignMap":
 			case "WeightVector":
-				fontInfo[lcKey] = parsePSData(value)[0];
+				fontInfo[lcKey] = parsePostScript(value)[0];
 				break;
 			
 			case "VVector":
-				fontInfo[lcKey] = parsePSData(value);
+				fontInfo[lcKey] = parsePostScript(value);
 				break;
 			
 			case "FontBBox":
-				fontInfo.boundingBox = parsePSData(value);
+				fontInfo.boundingBox = parsePostScript(value);
 				break;
 			
 			case "CharWidth":
-				this.setDirectionProperty(lcKey, parsePSData(value));
+				this.setDirectionProperty(lcKey, parsePostScript(value));
 				break;
 			
 			// User-defined
@@ -359,10 +359,10 @@ class PrimaryFont{
 					this.coordinates.push(...value.split(/\s+/).map(n => ~~n));
 					break;
 				case "PL":
-					this.labels.push(...parsePSData(value));
+					this.labels.push(...parsePostScript(value));
 					break;
 				case "PN":
-					this.name = parsePSData(value)[0];
+					this.name = parsePostScript(value)[0];
 					break;
 			}
 		}
@@ -381,6 +381,29 @@ class TrackKern{
 }
 
 
+/**
+ * Convert a boolean-like string to an actual {@link Boolean}.
+ *
+ * @internal
+ * @example parseBoolean("true") === true;
+ * @example parseBoolean("false") === false;
+ * @param {String} input
+ * @return {Boolean}
+ */
+function parseBoolean(input){
+	return "true" === String(input).trim().toLowerCase();
+}
+
+
+/**
+ * Parse a decimal string using hexadecimal or base-10 notation.
+ *
+ * @internal
+ * @example parseHex("<0x100>") == 256;
+ * @example parseHex("100") == 100;
+ * @param {String} input
+ * @return {Number}
+ */
 function parseHex(input){
 	return "<" === input[0]
 		? parseInt(input.replace(/^<|>$/g, ""), 16)
@@ -389,12 +412,15 @@ function parseHex(input){
 
 
 /**
- * Tokenise basic PostScript literals.
+ * Tokenise basic PostScript values.
  *
+ * @internal
+ * @example parsePostScript("(Foo) (Bar)") == ["Foo", "Bar"];
+ * @example parsePostScript("[1 2 [3]]") == [[1, 2, [3]]];
  * @param {String} input
  * @return {Array}
  */
-function parsePSData(input){
+function parsePostScript(input){
 	let list = {parent: null, tokens: []};
 	let depth = 0;
 	let parens = 0;
@@ -454,6 +480,16 @@ function parsePSData(input){
 	return list.tokens;
 }
 
-function parseBoolean(input){
-	return "true" === input.trim().toLowerCase();
-}
+
+
+// Expose internal functions/classes
+Object.assign(AdobeFontMetrics, {
+	CharacterMetric,
+	CharacterComposite,
+	KerningPair,
+	PrimaryFont,
+	TrackKern,
+	parseBoolean,
+	parseHex,
+	parsePostScript,
+});
