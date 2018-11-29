@@ -4,7 +4,7 @@
 	"license": "ISC",
 	"main": "./adobe-font-metrics",
 	"files": ["adobe-font-metrics.*"],
-	"repository": "https://github.com/Alhadis/AdobeFontMetrics.git",
+	"repository": "https://github.com/Alhadis/AdobeFontMetrics.js.git",
 	"description": "Flexible and complete implementation of the Adobe Font Metrics file format.",
 	"keywords": ["AFM", "font-metrics", "typography", "typesetting", "fonts", "microtypography", "kerning", "tracking", "ligatures", "opentype"],
 	"author": "John Gardner <gardnerjohng@gmail.com>",
