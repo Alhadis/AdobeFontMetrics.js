@@ -1,7 +1,6 @@
 "use strict";
 
 const AdobeFontMetrics = require("..");
-const {when} = require("./utils.js");
 
 when("parsing direction-specific properties", () => {
 	when("direction 0 is specified", () => {

@@ -1,7 +1,6 @@
 "use strict";
 
 const AdobeFontMetrics = require("..");
-const {when} = require("./utils.js");
 
 when("parsing global font information", () => {
 	it("stores format and version headers", () => {

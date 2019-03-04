@@ -1,7 +1,6 @@
 "use strict";
 
 const AdobeFontMetrics = require("..");
-const {when} = require("./utils.js");
 
 when("parsing track kerning data", () => {
 	it("stores it as a flat array", () => {

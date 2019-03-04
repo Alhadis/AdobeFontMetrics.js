@@ -1,7 +1,6 @@
 "use strict";
 
 const AdobeFontMetrics = require("..");
-const {when} = require("./utils.js");
 
 when("parsing pair-wise kerning data", () => {
 	it("stores kerning pairs for horizontal writing", () => {

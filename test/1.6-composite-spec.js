@@ -1,7 +1,6 @@
 "use strict";
 
 const AdobeFontMetrics = require("..");
-const {when} = require("./utils.js");
 
 when("parsing composite characters", () => {
 	it("stores them by name", () => {

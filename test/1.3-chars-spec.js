@@ -1,7 +1,6 @@
 "use strict";
 
 const AdobeFontMetrics = require("..");
-const {when} = require("./utils.js");
 
 when("parsing character metrics", () => {
 	it("initialises fields with empty or zeroed values", () => {

@@ -1,7 +1,6 @@
 "use strict";
 
 const AdobeFontMetrics = require("..");
-const {when} = require("./utils.js");
 
 when("parsing PostScript literals", () => {
 	const {parsePostScript} = AdobeFontMetrics;
