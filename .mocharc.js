@@ -4,6 +4,6 @@ module.exports = {
 	specPattern: /-spec\.js$/i,
 	require: [
 		"mocha-when/register",
-		"chai/register-should",
+		"chai/register-should.js",
 	],
 };
